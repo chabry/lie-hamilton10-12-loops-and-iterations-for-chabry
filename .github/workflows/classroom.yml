@@ -1,0 +1,29 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Loops and iteration for
+      id: loops-and-iteration-for
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Loops and iteration for
+        setup-command: npm install
+        command: npm test
+        timeout: 10
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        LOOPS-AND-ITERATION-FOR_RESULTS: "${{steps.loops-and-iteration-for.outputs.result}}"
+      with:
+        runners: loops-and-iteration-for
